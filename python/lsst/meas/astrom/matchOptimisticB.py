@@ -11,6 +11,7 @@ from .astromLib import matchOptimisticB, MatchOptimisticBControl
 
 __all__ = ["MatchOptimisticBTask", "MatchOptimisticBConfig", "SourceInfo"]
 
+
 class MatchOptimisticBConfig(pexConfig.Config):
     """Configuration for MatchOptimisticBTask
     """
@@ -21,7 +22,7 @@ class MatchOptimisticBConfig(pexConfig.Config):
     )
     maxMatchDistArcSec = pexConfig.RangeField(
         doc = "Maximum separation between reference objects and sources "
-            "beyond which they will not be considered a match (arcsec)",
+        "beyond which they will not be considered a match (arcsec)",
         dtype = float,
         default = 3,
         min = 0,
@@ -40,8 +41,8 @@ class MatchOptimisticBConfig(pexConfig.Config):
     )
     minFracMatchedPairs = pexConfig.RangeField(
         doc = "Minimum number of matched pairs as a fraction of the smaller of "
-            "the number of reference stars or the number of good sources; "
-            "the actual minimum is the smaller of this value or minMatchedPairs",
+        "the number of reference stars or the number of good sources; "
+        "the actual minimum is the smaller of this value or minMatchedPairs",
         dtype = float,
         default = 0.3,
         min = 0,
@@ -78,9 +79,10 @@ class MatchOptimisticBConfig(pexConfig.Config):
     minSnr = pexConfig.Field(
         dtype = float,
         doc= "Minimum allowed signal-to-noise ratio for sources used for matching "
-            "(in the flux specified by sourceFluxType); <=0 for no limit",
+        "(in the flux specified by sourceFluxType); <=0 for no limit",
         default = 40,
     )
+
 
 class SourceInfo(object):
     """Provide usability tests and catalog keys for sources in a source catalog
@@ -96,6 +98,7 @@ class SourceInfo(object):
 
     @throw RuntimeError if schema version unsupported or a needed field is not found
     """
+
     def __init__(self, schema, fluxType="Ap", minSnr=50):
         """Construct a SourceInfo
 
@@ -165,12 +168,12 @@ class SourceInfo(object):
 
 
 # The following block adds links to this task from the Task Documentation page.
-## \addtogroup LSST_task_documentation
-## \{
-## \page measAstrom_matchOptimisticBTask
-## \ref MatchOptimisticBTask "MatchOptimisticBTask"
-##      Match sources to reference objects
-## \}
+# \addtogroup LSST_task_documentation
+# \{
+# \page measAstrom_matchOptimisticBTask
+# \ref MatchOptimisticBTask "MatchOptimisticBTask"
+# Match sources to reference objects
+# \}
 
 class MatchOptimisticBTask(pipeBase.Task):
     """!Match sources to reference objects
@@ -280,7 +283,7 @@ class MatchOptimisticBTask(pipeBase.Task):
 
         if self.log:
             self.log.info("filterStars purged %d reference stars, leaving %d stars" %
-                (preNumObj - numRefObj, numRefObj))
+                          (preNumObj - numRefObj, numRefObj))
 
         sourceInfo = self.SourceInfoClass(
             schema = sourceCat.schema,
@@ -293,16 +296,16 @@ class MatchOptimisticBTask(pipeBase.Task):
         usableSourceCat = afwTable.SourceCatalog(sourceCat.table)
         usableSourceCat.extend(s for s in sourceCat if sourceInfo.isUsable(s))
         numUsableSources = len(usableSourceCat)
-        self.log.info("Purged %d unusable sources, leaving %d usable sources" % \
-            (numSources - numUsableSources, numUsableSources))
+        self.log.info("Purged %d unusable sources, leaving %d usable sources" %
+                      (numSources - numUsableSources, numUsableSources))
 
         if len(usableSourceCat) == 0:
             raise pipeBase.TaskError("No sources are usable")
 
-        del sourceCat # avoid accidentally using sourceCat; use usableSourceCat or goodSourceCat from now on
+        del sourceCat  # avoid accidentally using sourceCat; use usableSourceCat or goodSourceCat from now on
 
         minMatchedPairs = min(self.config.minMatchedPairs,
-                            int(self.config.minFracMatchedPairs * min([len(refCat), len(usableSourceCat)])))
+                              int(self.config.minFracMatchedPairs * min([len(refCat), len(usableSourceCat)])))
 
         # match usable (possibly saturated) sources and then purge saturated sources from the match list
         usableMatches = self._doMatch(
@@ -324,7 +327,7 @@ class MatchOptimisticBTask(pipeBase.Task):
                 matches.append(match)
 
         self.log.logdebug("Found %d usable matches, of which %d had good sources" %
-            (len(usableMatches), len(matches)))
+                          (len(usableMatches), len(matches)))
 
         if len(matches) == 0:
             raise RuntimeError("Unable to match sources")
@@ -340,7 +343,7 @@ class MatchOptimisticBTask(pipeBase.Task):
 
     @pipeBase.timeMethod
     def _doMatch(self, refCat, sourceCat, wcs, refFluxField, numUsableSources, minMatchedPairs,
-        maxMatchDist, sourceInfo, verbose):
+                 maxMatchDist, sourceInfo, verbose):
         """!Implementation of matching sources to position reference stars
 
         Unlike matchObjectsToSources, this method does not check if the sources are suitable.

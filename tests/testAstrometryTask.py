@@ -54,13 +54,13 @@ class TestAstrometricSolver(utilsTests.TestCase):
         metadata.set("CUNIT1", "deg")
         metadata.set("CUNIT2", "deg")
         metadata.set("CRVAL1", 215.5)
-        metadata.set("CRVAL2",  53.0)
+        metadata.set("CRVAL2", 53.0)
         metadata.set("CRPIX1", self.ctrPix[0] + 1)
         metadata.set("CRPIX2", self.ctrPix[1] + 1)
-        metadata.set("CD1_1",  5.1e-05)
-        metadata.set("CD1_2",  0.0)
+        metadata.set("CD1_1", 5.1e-05)
+        metadata.set("CD1_2", 0.0)
         metadata.set("CD2_2", -5.1e-05)
-        metadata.set("CD2_1",  0.0)
+        metadata.set("CD2_1", 0.0)
         self.tanWcs = afwImage.cast_TanWcs(afwImage.makeWcs(metadata))
         self.exposure = afwImage.ExposureF(self.bbox)
         self.exposure.setWcs(self.tanWcs)
@@ -100,7 +100,7 @@ class TestAstrometricSolver(utilsTests.TestCase):
         fitWcs = self.exposure.getWcs()
         self.assertRaises(Exception, self.assertWcsNearlyEqualOverBBox, fitWcs, distortedWcs)
         self.assertWcsNearlyEqualOverBBox(distortedWcs, fitWcs, self.bbox,
-            maxDiffSky=0.01*afwGeom.arcseconds, maxDiffPix=0.02)
+                                          maxDiffSky=0.01*afwGeom.arcseconds, maxDiffPix=0.02)
 
         srcCoordKey = afwTable.CoordKey(sourceCat.schema["coord"])
         refCoordKey = afwTable.CoordKey(results.refCat.schema["coord"])
@@ -151,7 +151,7 @@ class TestAstrometricSolver(utilsTests.TestCase):
         refFluxRKey = refCat.schema["r_flux"].asKey()
 
         sourceSchema = afwTable.SourceTable.makeMinimalSchema()
-        measBase.SingleFrameMeasurementTask(schema=sourceSchema) # expand the schema
+        measBase.SingleFrameMeasurementTask(schema=sourceSchema)  # expand the schema
         sourceCat = afwTable.SourceCatalog(sourceSchema)
         sourceCentroidKey = afwTable.Point2DKey(sourceSchema["slot_Centroid"])
         sourceFluxKey = sourceSchema["slot_ApFlux_flux"].asKey()
@@ -166,6 +166,7 @@ class TestAstrometricSolver(utilsTests.TestCase):
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+
 def suite():
     """Returns a suite containing all the test cases in this module."""
     utilsTests.init()
@@ -175,6 +176,7 @@ def suite():
     suites += unittest.makeSuite(utilsTests.MemoryTestCase)
 
     return unittest.TestSuite(suites)
+
 
 def run(exit=False):
     """Run the tests"""

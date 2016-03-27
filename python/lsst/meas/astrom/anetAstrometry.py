@@ -33,6 +33,7 @@ from .anetBasicAstrometry import ANetBasicAstrometryTask
 from .sip import makeCreateWcsWithSip
 from .display import displayAstrometry
 
+
 class ANetAstrometryConfig(pexConfig.Config):
     solver = pexConfig.ConfigurableField(
         target = ANetBasicAstrometryTask,
@@ -48,13 +49,13 @@ class ANetAstrometryConfig(pexConfig.Config):
     rejectIter = pexConfig.RangeField(dtype=int, default=3, doc="Rejection iterations for Wcs fitting",
                                       min=0)
 
+    # \addtogroup LSST_task_documentation
+    # \{
+    # \page measAstrom_anetAstrometryTask
+    # \ref ANetAstrometryTask_ "ANetAstrometryTask"
+    # Use astrometry.net to match input sources with a reference catalog and solve for the Wcs
+    # \}
 
-    ## \addtogroup LSST_task_documentation
-    ## \{
-    ## \page measAstrom_anetAstrometryTask
-    ## \ref ANetAstrometryTask_ "ANetAstrometryTask"
-    ## Use astrometry.net to match input sources with a reference catalog and solve for the Wcs
-    ## \}
 
 class ANetAstrometryTask(pipeBase.Task):
     """!Use astrometry.net to match input sources with a reference catalog and solve for the Wcs
@@ -298,7 +299,7 @@ class ANetAstrometryTask(pipeBase.Task):
             oldCentroidName = sourceCat.table.getCentroidDefinition()
             sourceCat.table.defineCentroid(self.distortedName)
             try:
-                yield bbox # Execute 'with' block, providing bbox to 'as' variable
+                yield bbox  # Execute 'with' block, providing bbox to 'as' variable
             finally:
                 # Un-apply distortion
                 sourceCat.table.defineCentroid(oldCentroidName)
@@ -341,7 +342,7 @@ class ANetAstrometryTask(pipeBase.Task):
             matchMeta = astrom.getMatchMetadata()
             if matches is None or len(matches) == 0:
                 raise RuntimeError("No astrometric matches")
-            self.log.info("%d astrometric matches" %  (len(matches)))
+            self.log.info("%d astrometric matches" % (len(matches)))
 
             if self._display:
                 frame = lsstDebug.Info(__name__).frame
@@ -383,7 +384,7 @@ class ANetAstrometryTask(pipeBase.Task):
         matchMeta = astrom.getMatchMetadata()
         if matches is None or len(matches) == 0:
             raise RuntimeError("No astrometric matches")
-        self.log.info("%d astrometric matches" %  (len(matches)))
+        self.log.info("%d astrometric matches" % (len(matches)))
 
         # Note that this is the Wcs for the provided positions, which may be distorted
         exposure.setWcs(astrom.getWcs())

@@ -33,6 +33,7 @@ from .display import displayAstrometry
 from .astromLib import makeMatchStatistics
 from .createMatchMetadata import createMatchMetadata
 
+
 class AstrometryConfig(pexConfig.Config):
     refObjLoader = pexConfig.ConfigurableField(
         target = LoadAstrometryNetObjectsTask,
@@ -49,39 +50,40 @@ class AstrometryConfig(pexConfig.Config):
     forceKnownWcs = pexConfig.Field(
         dtype = bool,
         doc= "If True then load reference objects and match sources but do not fit a WCS; " +
-            " this simply controls whether 'run' calls 'solve' or 'loadAndMatch'",
+        " this simply controls whether 'run' calls 'solve' or 'loadAndMatch'",
         default = False,
     )
     maxIter = pexConfig.RangeField(
         doc = "maximum number of iterations of match sources and fit WCS" +
-            "ignored if not fitting a WCS",
+        "ignored if not fitting a WCS",
         dtype = int,
         default = 3,
         min = 1,
     )
     matchDistanceSigma = pexConfig.RangeField(
         doc = "the maximum match distance is set to "
-            " mean_match_distance + matchDistanceSigma*std_dev_match_distance; " +
-            "ignored if not fitting a WCS",
+        " mean_match_distance + matchDistanceSigma*std_dev_match_distance; " +
+        "ignored if not fitting a WCS",
         dtype = float,
         default = 2,
         min = 0,
     )
     minMatchDistanceArcSec = pexConfig.RangeField(
         doc = "the match distance below which further iteration is pointless (arcsec); "
-            "ignored if not fitting a WCS",
+        "ignored if not fitting a WCS",
         dtype = float,
         default = 0.001,
         min = 0,
     )
 
 # The following block adds links to this task from the Task Documentation page.
-## \addtogroup LSST_task_documentation
-## \{
-## \page measAstrom_astrometryTask
-## \ref AstrometryTask_ "AstrometryTask"
-##      Match an input source catalog with objects from a reference catalog and solve for the WCS
-## \}
+# \addtogroup LSST_task_documentation
+# \{
+# \page measAstrom_astrometryTask
+# \ref AstrometryTask_ "AstrometryTask"
+# Match an input source catalog with objects from a reference catalog and solve for the WCS
+# \}
+
 
 class AstrometryTask(pipeBase.Task):
     """!Match an input source catalog with objects from a reference catalog and solve for the WCS
@@ -300,7 +302,7 @@ class AstrometryTask(pipeBase.Task):
         for i in range(self.config.maxIter):
             iterNum = i + 1
             try:
-                tryRes = self._matchAndFitWcs( # refCat, sourceCat, refFluxField, bbox, wcs, exposure=None
+                tryRes = self._matchAndFitWcs(  # refCat, sourceCat, refFluxField, bbox, wcs, exposure=None
                     refCat = loadRes.refCat,
                     sourceCat = sourceCat,
                     refFluxField = loadRes.fluxField,
@@ -327,7 +329,7 @@ class AstrometryTask(pipeBase.Task):
             if maxMatchDist is not None:
                 if tryMatchDist.maxMatchDist >= maxMatchDist:
                     self.log.logdebug(
-                        "Iteration %d had no better maxMatchDist; using previous iteration" %  (iterNum,))
+                        "Iteration %d had no better maxMatchDist; using previous iteration" % (iterNum,))
                     iterNum -= 1
                     break
 
@@ -375,6 +377,7 @@ class AstrometryTask(pipeBase.Task):
             distStdDev = distStdDev,
             maxMatchDist = distMean + self.config.matchDistanceSigma*distStdDev,
         )
+
     def _getExposureMetadata(self, exposure):
         """!Extract metadata from an exposure
 
@@ -397,7 +400,7 @@ class AstrometryTask(pipeBase.Task):
 
     @pipeBase.timeMethod
     def _matchAndFitWcs(self, refCat, sourceCat, refFluxField, bbox, wcs, maxMatchDist=None,
-        exposure=None):
+                        exposure=None):
         """!Match sources to reference objects and fit a WCS
 
         @param[in] refCat  catalog of reference objects

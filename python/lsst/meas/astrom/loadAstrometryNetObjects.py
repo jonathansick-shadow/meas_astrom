@@ -10,12 +10,13 @@ __all__ = ["LoadAstrometryNetObjectsTask", "LoadAstrometryNetObjectsConfig"]
 LoadAstrometryNetObjectsConfig = LoadReferenceObjectsTask.ConfigClass
 
 # The following block adds links to this task from the Task Documentation page.
-## \addtogroup LSST_task_documentation
-## \{
-## \page measAstrom_loadAstrometryNetObjectsTask
-## \ref LoadAstrometryNetObjectsTask "LoadAstrometryNetObjectsTask"
-##      Load reference objects from astrometry.net index files
-## \}
+# \addtogroup LSST_task_documentation
+# \{
+# \page measAstrom_loadAstrometryNetObjectsTask
+# \ref LoadAstrometryNetObjectsTask "LoadAstrometryNetObjectsTask"
+# Load reference objects from astrometry.net index files
+# \}
+
 
 class LoadAstrometryNetObjectsTask(LoadReferenceObjectsTask):
     """!Load reference objects from astrometry.net index files
@@ -74,8 +75,8 @@ class LoadAstrometryNetObjectsTask(LoadReferenceObjectsTask):
         """
         LoadReferenceObjectsTask.__init__(self, config=config, **kwargs)
         self.andConfig = andConfig
-        self.haveIndexFiles = False # defer reading index files until we know they are needed
-            # because astrometry may not be used, in which case it may not be properly configured
+        self.haveIndexFiles = False  # defer reading index files until we know they are needed
+        # because astrometry may not be used, in which case it may not be properly configured
 
     @pipeBase.timeMethod
     def loadSkyCircle(self, ctrCoord, radius, filterName=None):
@@ -124,7 +125,7 @@ class LoadAstrometryNetObjectsTask(LoadReferenceObjectsTask):
         ) + margs + (
             self.andConfig.starGalaxyColumn,
             self.andConfig.variableColumn,
-            True, # eliminate duplicate IDs
+            True,  # eliminate duplicate IDs
         )
 
         self.log.logdebug("search for objects at %s with radius %s deg" % (ctrCoord, radius.asDegrees()))
@@ -152,7 +153,7 @@ class LoadAstrometryNetObjectsTask(LoadReferenceObjectsTask):
             return
 
         self.log.logdebug("read index files")
-        self.haveIndexFiles = True # just try once
+        self.haveIndexFiles = True  # just try once
 
         if self.andConfig is None:
             self.andConfig = getConfigFromEnvironment()
@@ -172,7 +173,7 @@ class LoadAstrometryNetObjectsTask(LoadReferenceObjectsTask):
     def _getSolver(self):
         solver = astromNet.solver_new()
         # HACK, set huge default pixel scale range.
-        lo,hi = 0.01, 3600.
+        lo, hi = 0.01, 3600.
         solver.setPixelScaleRange(lo, hi)
         return solver
 
@@ -180,12 +181,15 @@ class LoadAstrometryNetObjectsTask(LoadReferenceObjectsTask):
 class LoadMultiIndexes(object):
     """Context manager for loading and unloading astrometry.net multi-index files
     """
+
     def __init__(self, multiInds):
         self.multiInds = multiInds
+
     def __enter__(self):
         for mi in self.multiInds:
             mi.reload()
         return self.multiInds
+
     def __exit__(self, typ, val, trace):
         for mi in self.multiInds:
             mi.unload()

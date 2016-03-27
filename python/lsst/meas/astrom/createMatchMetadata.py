@@ -6,6 +6,7 @@ from lsst.afw.image.utils import getDistortedWcs
 
 __all__ = ["createMatchMetadata"]
 
+
 def createMatchMetadata(exposure):
     """Create metadata required for unpersisting a match list
 

@@ -42,7 +42,9 @@ import testFindAstrometryNetDataDir as helper
 # Set up local astrometry_net_data
 helper.setupAstrometryNetDataDir('cfhttemplate')
 
+
 class TestMatchOptimisticB(unittest.TestCase):
+
     def setUp(self):
 
         self.config = measAstrom.MatchOptimisticBTask.ConfigClass()
@@ -55,18 +57,18 @@ class TestMatchOptimisticB(unittest.TestCase):
         metadata.set("CTYPE2", "DEC--TAN")
         metadata.set("CUNIT1", "deg")
         metadata.set("CUNIT2", "deg")
-        metadata.set("CRVAL1",  36.930640)
-        metadata.set("CRVAL2",  -4.939560)
+        metadata.set("CRVAL1", 36.930640)
+        metadata.set("CRVAL2", -4.939560)
         metadata.set("CRPIX1", 792.4)
         metadata.set("CRPIX2", 560.7)
         metadata.set("CD1_1", -5.17e-05)
-        metadata.set("CD1_2",  0.0)
-        metadata.set("CD2_2",  5.17e-05)
-        metadata.set("CD2_1",  0.0)
+        metadata.set("CD1_2", 0.0)
+        metadata.set("CD2_2", 5.17e-05)
+        metadata.set("CD2_1", 0.0)
         self.wcs = afwImage.makeWcs(metadata)
         self.distortedWcs = self.wcs
 
-        self.filename=os.path.join(os.path.dirname(__file__), "cat.xy.fits")
+        self.filename = os.path.join(os.path.dirname(__file__), "cat.xy.fits")
         self.tolArcsec = .4
         self.tolPixel = .1
 
@@ -84,7 +86,6 @@ class TestMatchOptimisticB(unittest.TestCase):
 
     def testQuadraticDistort(self):
         self.singleTestInstance(self.filename, distort.quadraticDistort)
-
 
     def testLargeDistortion(self):
         # This transform is about as extreme as I can get:
@@ -116,10 +117,10 @@ class TestMatchOptimisticB(unittest.TestCase):
             def plot(catalog, symbol):
                 plt.plot([ss.getX() for ss in catalog], [ss.getY() for ss in catalog], symbol)
 
-            #plot(sourceCat, 'k+') # Original positions: black +
-            plot(distortedCat, 'b+') # Distorted positions: blue +
-            plot(undistorted, 'g+') # Undistorted positions: green +
-            plot(refs, 'rx') # Reference catalog: red x
+            # plot(sourceCat, 'k+') # Original positions: black +
+            plot(distortedCat, 'b+')  # Distorted positions: blue +
+            plot(undistorted, 'g+')  # Undistorted positions: green +
+            plot(refs, 'rx')  # Reference catalog: red x
             # The green + should overlap with the red x, because that's how matchOptimisticB does it.
             # The black + happens to overlap with those also, but that's beside the point.
             plt.show()
@@ -153,7 +154,7 @@ class TestMatchOptimisticB(unittest.TestCase):
                 sourceCentroid = source.getCentroid()
                 radius = math.hypot(*(refCentroid - sourceCentroid))
                 self.fail("ID mismatch: %s at %s != %s at %s; error = %0.1f pix" %
-                    (refObj.getId(), refCentroid, source.getId(), sourceCentroid, radius))
+                          (refObj.getId(), refCentroid, source.getId(), sourceCentroid, radius))
 
         self.assertLess(maxDistErr.asArcseconds(), 1e-7)
 
@@ -248,7 +249,6 @@ class TestMatchOptimisticB(unittest.TestCase):
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 
-
 def suite():
     """Returns a suite containing all the test cases in this module."""
     utilsTests.init()
@@ -259,11 +259,10 @@ def suite():
 
     return unittest.TestSuite(suites)
 
+
 def run(exit=False):
     """Run the tests"""
     utilsTests.run(suite(), exit)
-
-
 
 
 if __name__ == "__main__":

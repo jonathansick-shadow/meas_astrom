@@ -26,6 +26,7 @@ import lsst.afw.display.ds9 as ds9
 import lsst.afw.math as afwMath
 import lsst.meas.algorithms as measAlg
 
+
 class CatalogStarSelectorConfig(pexConfig.Config):
     fluxLim = pexConfig.Field(
         doc = "specify the minimum psfFlux for good Psf Candidates",
@@ -37,15 +38,15 @@ class CatalogStarSelectorConfig(pexConfig.Config):
         doc = "specify the maximum psfFlux for good Psf Candidates (ignored if == 0)",
         dtype = float,
         default = 0.0,
-#        minValue = 0.0,
+        #        minValue = 0.0,
         check = lambda x: x >= 0.0,
     )
     badStarPixelFlags = pexConfig.ListField(
         doc = "PSF candidate objects may not have any of these bits set",
         dtype = str,
         default = ["base_PixelFlags_flag_edge", "base_PixelFlags_flag_interpolatedCenter",
-            "base_PixelFlags_flag_saturatedCenter"],
-        )
+                   "base_PixelFlags_flag_saturatedCenter"],
+    )
     kernelSize = pexConfig.Field(
         doc = "size of the kernel to create",
         dtype = int,
@@ -56,6 +57,7 @@ class CatalogStarSelectorConfig(pexConfig.Config):
         dtype = int,
         default = 0,
     )
+
 
 class CheckSource(object):
     """A functor to check whether a source has any flags set that should cause it to be labeled bad."""
@@ -70,15 +72,16 @@ class CheckSource(object):
         for k in self.keys:
             if source.get(k):
                 return False
-        if self.fluxLim is not None and source.getPsfFlux() < self.fluxLim: # ignore faint objects
+        if self.fluxLim is not None and source.getPsfFlux() < self.fluxLim:  # ignore faint objects
             return False
-        if self.fluxMax != 0.0 and source.getPsfFlux() > self.fluxMax: # ignore bright objects
+        if self.fluxMax != 0.0 and source.getPsfFlux() > self.fluxMax:  # ignore bright objects
             return False
         return True
 
+
 class CatalogStarSelector(object):
     ConfigClass = CatalogStarSelectorConfig
-    usesMatches = True # selectStars uses (requires) its matches argument
+    usesMatches = True  # selectStars uses (requires) its matches argument
 
     def __init__(self, config=None):
         """Construct a star selector that uses second moments
@@ -90,10 +93,10 @@ class CatalogStarSelector(object):
         if not config:
             config = CatalogStarSelector.ConfigClass()
 
-        self._kernelSize  = config.kernelSize
+        self._kernelSize = config.kernelSize
         self._borderWidth = config.borderWidth
-        self._fluxLim  = config.fluxLim
-        self._fluxMax  = config.fluxMax
+        self._fluxLim = config.fluxLim
+        self._fluxMax = config.fluxMax
         self._badStarPixelFlags = config.badStarPixelFlags
 
     def selectStars(self, exposure, sourceCat, matches=None):
@@ -163,7 +166,7 @@ class CatalogStarSelector(object):
                         except Exception as err:
                             symb, ctype = "o", ds9.RED
                             print "RHL", err
-                            pass # FIXME: should log this!
+                            pass  # FIXME: should log this!
                 else:
                     symb, ctype = "o", ds9.BLUE
 

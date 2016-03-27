@@ -37,6 +37,7 @@ import lsst.afw.table as afwTable
 import lsst.meas.base as measBase
 import lsst.meas.astrom as measAstrom
 
+
 class TestAstrometricSolver(utilsTests.TestCase):
 
     def setUp(self):
@@ -51,13 +52,13 @@ class TestAstrometricSolver(utilsTests.TestCase):
         metadata.set("CUNIT1", "deg")
         metadata.set("CUNIT2", "deg")
         metadata.set("CRVAL1", 215.5)
-        metadata.set("CRVAL2",  53.0)
+        metadata.set("CRVAL2", 53.0)
         metadata.set("CRPIX1", ctrPix[0] + 1)
         metadata.set("CRPIX2", ctrPix[1] + 1)
-        metadata.set("CD1_1",  5.1e-05)
-        metadata.set("CD1_2",  0.0)
+        metadata.set("CD1_1", 5.1e-05)
+        metadata.set("CD1_2", 0.0)
         metadata.set("CD2_2", -5.1e-05)
-        metadata.set("CD2_1",  0.0)
+        metadata.set("CD2_1", 0.0)
         self.wcs = afwImage.cast_TanWcs(afwImage.makeWcs(metadata))
         self.bboxD = afwGeom.Box2D(afwGeom.Point2D(10, 100), afwGeom.Extent2D(1000, 1500))
         self.numMatches = 25
@@ -76,7 +77,7 @@ class TestAstrometricSolver(utilsTests.TestCase):
 
         np.random.seed(5)
         pixPointList = [afwGeom.Point2D(pos) for pos in
-            np.random.random_sample([self.numMatches, 2])*self.bboxD.getDimensions() + self.bboxD.getMin()]
+                        np.random.random_sample([self.numMatches, 2])*self.bboxD.getDimensions() + self.bboxD.getMin()]
         for pixPoint in pixPointList:
             src = self.sourceCat.addNew()
             src.set(self.sourceCentroidKey, pixPoint)
@@ -117,7 +118,7 @@ class TestAstrometricSolver(utilsTests.TestCase):
         offDirList = [val*afwGeom.radians for val in np.random.random_sample([self.numMatches])*math.pi*2]
         for offLen, offDir, match in itertools.izip(offLenList, offDirList, self.matchList):
             coord = match.first.get(self.refCoordKey)
-            coord.offset(offDir, offLen) # an in-place operation
+            coord.offset(offDir, offLen)  # an in-place operation
             match.first.set(self.refCoordKey, coord)
         itemList = (afwMath.MEDIAN, afwMath.MEANCLIP, afwMath.IQRANGE)
         itemMask = reduce(lambda a, b: a | b, itemList)
@@ -156,6 +157,7 @@ def suite():
     suites += unittest.makeSuite(utilsTests.MemoryTestCase)
 
     return unittest.TestSuite(suites)
+
 
 def run(exit=False):
     """Run the tests"""

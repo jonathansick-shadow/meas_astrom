@@ -8,6 +8,7 @@ from .astrometryNetDataConfig import AstrometryNetDataConfig
 
 __all__ = ["getIndexPath", "getConfigFromEnvironment", "AstrometryNetCatalog", "generateCache"]
 
+
 def getIndexPath(fn):
     """!Get the path to the specified astrometry.net index file
 
@@ -50,12 +51,14 @@ def getConfigFromEnvironment():
     andConfig.load(andConfigPath)
     return andConfig
 
+
 class MultiIndexCache(object):
     """A wrapper for the multiindex_t, which only reads the data when it needs to
 
     The MultiIndexCache may be instantiated directly, or via the 'fromFilenameList'
     class method, which loads it from a list of filenames.
     """
+
     def __init__(self, filenameList, healpix, nside):
         """!Constructor
 
@@ -149,7 +152,7 @@ class MultiIndexCache(object):
         return self._mi[i]
 
     def __len__(self):
-        return len(self._filenameList) - 1 # The first is the multiindex; the rest are the indices
+        return len(self._filenameList) - 1  # The first is the multiindex; the rest are the indices
 
     def __iter__(self):
         self.reload()

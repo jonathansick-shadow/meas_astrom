@@ -53,13 +53,13 @@ class TestLoadAstrometryNetObjects(unittest.TestCase):
         metadata.set("CUNIT1", "deg")
         metadata.set("CUNIT2", "deg")
         metadata.set("CRVAL1", 215.5)
-        metadata.set("CRVAL2",  53.0)
+        metadata.set("CRVAL2", 53.0)
         metadata.set("CRPIX1", self.ctrPix[0] + 1)
         metadata.set("CRPIX2", self.ctrPix[1] + 1)
-        metadata.set("CD1_1",  5.1e-05)
-        metadata.set("CD1_2",  0.0)
+        metadata.set("CD1_1", 5.1e-05)
+        metadata.set("CD1_2", 0.0)
         metadata.set("CD2_2", -5.1e-05)
-        metadata.set("CD2_1",  0.0)
+        metadata.set("CD2_1", 0.0)
         self.wcs = afwImage.makeWcs(metadata)
         self.desNumStarsInPixelBox = 270
         self.desNumStarsInSkyCircle = 410
@@ -182,8 +182,8 @@ class TestLoadAstrometryNetObjects(unittest.TestCase):
             point = refObj.get(centroidKey)
             if not bbox.contains(point):
                 coord = refObj.get(coordKey)
-                self.fail("refObj at RA, Dec %0.3f, %0.3f point %s is not in bbox %s" % \
-                    (coord[0].asDegrees(), coord[1].asDegrees(), point, bbox))
+                self.fail("refObj at RA, Dec %0.3f, %0.3f point %s is not in bbox %s" %
+                          (coord[0].asDegrees(), coord[1].asDegrees(), point, bbox))
 
     def plotStars(self, refCat, bbox=None):
         """Plot the centroids of reference objects, and the bounding box (if specified)
@@ -191,7 +191,7 @@ class TestLoadAstrometryNetObjects(unittest.TestCase):
         import matplotlib.pyplot as pyplot
         if bbox is not None:
             cornerList = list(afwGeom.Box2D(bbox).getCorners())
-            cornerList.append(cornerList[0]) # show 4 sides of the box by going back to the beginning
+            cornerList.append(cornerList[0])  # show 4 sides of the box by going back to the beginning
             xc, yc = zip(*cornerList)
             pyplot.plot(xc, yc, '-')
 
@@ -200,7 +200,6 @@ class TestLoadAstrometryNetObjects(unittest.TestCase):
         xp, yp = zip(*centroidList)
         pyplot.plot(xp, yp, '.')
         pyplot.show()
-
 
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -214,6 +213,7 @@ def suite():
     suites += unittest.makeSuite(utilsTests.MemoryTestCase)
 
     return unittest.TestSuite(suites)
+
 
 def run(exit=False):
     """Run the tests"""

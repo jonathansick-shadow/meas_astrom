@@ -12,6 +12,7 @@ from .sip import makeCreateWcsWithSip
 
 __all__ = ["FitTanSipWcsTask", "FitTanSipWcsConfig"]
 
+
 class FitTanSipWcsConfig(pexConfig.Config):
     order = pexConfig.RangeField(
         doc = "order of SIP polynomial",
@@ -20,8 +21,8 @@ class FitTanSipWcsConfig(pexConfig.Config):
         min = 0,
     )
     numIter = pexConfig.RangeField(
-        doc = "number of iterations of fitter (which fits X and Y separately, and so benefits from " + \
-            "a few iterations",
+        doc = "number of iterations of fitter (which fits X and Y separately, and so benefits from " +
+        "a few iterations",
         dtype = int,
         default = 3,
         min = 1,
@@ -40,19 +41,20 @@ class FitTanSipWcsConfig(pexConfig.Config):
     )
     maxScatterArcsec = pexConfig.RangeField(
         doc = "maximum median scatter of a WCS fit beyond which the fit fails (arcsec); " +
-            "be generous, as this is only intended to catch catastrophic failures",
+        "be generous, as this is only intended to catch catastrophic failures",
         dtype = float,
         default = 10,
         min = 0,
     )
 
 # The following block adds links to this task from the Task Documentation page.
-## \addtogroup LSST_task_documentation
-## \{
-## \page measAstrom_fitTanSipWcsTask
-## \ref FitTanSipWcsTask "FitTanSipWcsTask"
-##      Fit a TAN-SIP WCS given a list of reference object/source matches
-## \}
+# \addtogroup LSST_task_documentation
+# \{
+# \page measAstrom_fitTanSipWcsTask
+# \ref FitTanSipWcsTask "FitTanSipWcsTask"
+# Fit a TAN-SIP WCS given a list of reference object/source matches
+# \}
+
 
 class FitTanSipWcsTask(pipeBase.Task):
     """!Fit a TAN-SIP WCS given a list of reference object/source matches
